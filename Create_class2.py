@@ -13,3 +13,5 @@ class Card:
         self.qt = quantity
         self.fil = filling
         self.sh = shape
+
+# dit is ook leuk om te testen:P
