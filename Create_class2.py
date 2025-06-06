@@ -9,6 +9,8 @@
 
 import random
 from itertools import combinations
+import threading
+import time
 
 class Card: 
     Colors = {"green":1, "red": 2, "purple":3}
@@ -88,9 +90,7 @@ class SetAlgorithms:
 
         for i in range(4):
             prop1, prop2, prop3 = v1[i],v2[i],v3[i]
-
             all_same = (prop1 == prop2 == prop3)
-
             all_different = (prop1 != prop2 and prop2 != prop3 and prop1 != prop3)
 
             if not (all_same or all_different):
@@ -120,5 +120,3 @@ class SetAlgorithms:
     def is_cap_set(cards):
         #check if tehre are no sets in collection
         return SetAlgorithms.find_one_set(cards) is None
-    
-  
