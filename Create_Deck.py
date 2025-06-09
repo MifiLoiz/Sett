@@ -19,8 +19,11 @@ Problems:
 
             git merge First_Branch --no-edit
 
-    dk how to print the cards; 
     dk if anything works at this point, but seems like an idea for a good code:P
+
+    My additions to the file are not run, I always get printed: 
+        [1, 2, 3, 3]
+        1
 
 """
 
@@ -41,8 +44,10 @@ from Create_class2 import Card
 #        self.fil = filling
 #        self.sh = shape
 
-tes = Card(1,2,2,1)
-print(tes)
+#Card(0,1,2,3)
+#tes = Card(1,2,2,1)
+#print(tes)
+#print(tes[0])
 
 # Create a deck
 class Deck: 
@@ -58,9 +63,11 @@ class Deck:
             for q in range(1, self.qt + 1):
                 for f in range(1, self.fil + 1): 
                     for s in range(1, self.sh + 1): 
+                        print("dit is: ", s)
                         return deck.append(Card(c, q, f, s))
 
-deck = Deck()
+
+Deck()
 #print(deck)
 
 # Create a table
@@ -72,10 +79,10 @@ class Table:
         not_picked = Deck()
 
         for i in range(0, 13): 
-            pick = choice(not_picked)
-            not_picked = remove(pick)
+            pick = random.choice(not_picked)
+            #not_picked = remove(pick)
 
-table = Table()
+#Table()
 #print(table)
 
 
