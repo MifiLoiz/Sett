@@ -22,15 +22,15 @@ import random
 #from Create_class2 import Card
 
 # Manual card import
-class Card: 
-    def __init__(self, color, quantity, filling, shape): 
-        self.col = color
-        self.qt = quantity
-        self.fil = filling
-        self.sh = shape
+#class Card: 
+#    def __init__(self, color, quantity, filling, shape): 
+#        self.col = color
+#        self.qt = quantity
+#        self.fil = filling
+#        self.sh = shape
 
-#tes = Card(1,2,2,1)
-#print(tes)
+tes = Card(1,2,2,1)
+print(tes)
 
 # Create a deck
 class Deck: 
@@ -49,7 +49,7 @@ class Deck:
                         return deck.append(Card(c, q, f, s))
 
 deck = Deck()
-print(deck)
+#print(deck)
 
 # Create a table
 class Table: 
@@ -64,6 +64,6 @@ class Table:
             not_picked = remove(pick)
 
 table = Table()
-print(table)
+#print(table)
 
 
