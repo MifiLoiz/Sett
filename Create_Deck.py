@@ -3,8 +3,10 @@
 
 """ 
 For now, I just want it to create all possible cards and randomly pick 12 of these in order to create a table. 
+
 Problems: 
     dk how to import Card; 
+        https://graphite.dev/guides/how-to-pull-from-another-branch-in-git
     dk how to print the cards; 
     dk if anything works at this point, but seems like an idea for a good code:P
 
