@@ -17,6 +17,8 @@ Problems:
             git checkout Second_Class
             git merge First_Class
 
+            git merge First_Branch --no-edit
+
     dk how to print the cards; 
     dk if anything works at this point, but seems like an idea for a good code:P
 
