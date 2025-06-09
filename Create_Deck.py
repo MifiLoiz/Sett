@@ -7,6 +7,16 @@ For now, I just want it to create all possible cards and randomly pick 12 of the
 Problems: 
     dk how to import Card; 
         https://graphite.dev/guides/how-to-pull-from-another-branch-in-git
+        
+        Setp-by-step guide: 
+            git checkout First_Class
+            git add first_class.py
+            git commit -m "Add First_Class implementation"
+            git push origin First_Class
+
+            git checkout Second_Class
+            git merge First_Class
+
     dk how to print the cards; 
     dk if anything works at this point, but seems like an idea for a good code:P
 
@@ -19,7 +29,7 @@ Problems:
 
 # Imports
 import random
-#from Create_class2 import Card
+from Create_class2 import Card
 
 # Manual card import
 #class Card: 
