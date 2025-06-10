@@ -1,6 +1,4 @@
-#Rosas poging om te uploaden
-# Create a class for the cards
-# Now for real 
+# Create a class and algorithm for the cards and to find them
 
 # green     red     purple
 # 1         2       3 
