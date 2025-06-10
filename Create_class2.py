@@ -24,13 +24,13 @@ class Card:
 
     # make the Card behave like a list (this only lets you retrieve the elements)
     def __getitem__(self, index):
-        if index == 1:
+        if index == 0:
             return self.col
-        elif index == 2:
+        elif index == 1:
             return self.qt
-        elif index == 3:
+        elif index == 2:
             return self.fil        
-        elif index == 4:
+        elif index == 3:
             return self.sh        
         else:
             raise IndexError("Card only has 4 elements: index 1 through 4")
