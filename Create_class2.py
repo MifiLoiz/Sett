@@ -15,6 +15,13 @@ Progress:
 # empty     striped filled
 # diamond   oval    squigle
 
+import pygame 
+import random
+import sys
+import time 
+from itertools import combinations
+
+
 class Card: 
     Colors = {"green":1, "red": 2, "purple":3}
     Quantities = {1:1, 2:2, 3:3}
@@ -159,4 +166,8 @@ def list_pic_gen(card):
     quantity_pic = card[1]
     return f"{color_pic}{shape_pic}{fill_pic}{quantity_pic}"
 
-print(list_pic_gen(Card(1,2,3,3)))
+all_cards = SetAlgorithms.generate_all_cards()
+card_to_draw = random.choice(all_cards)
+
+print(list_pic_gen(card_to_draw))
+
