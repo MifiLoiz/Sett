@@ -12,6 +12,10 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Set")
 gameDisplay.fill(background_col)
 
+
+plaatje = pygame.image.load('kaarten/' + "greendiamondempty1" + '.gif').convert()
+scrn = pygame.display.set_mode((0,0))
+scrn.blit(plaatje, (0,0))
 pygame.display.flip()
 
 exit = False
