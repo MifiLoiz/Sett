@@ -5,7 +5,7 @@ import random
 import sys
 import time 
 from constants import *
-from Create_class2 import *
+from Card_class_main_algorithm import *
 
 all_cards = SetAlgorithms.generate_all_cards()
 card_to_draw = random.choice(all_cards)[0]

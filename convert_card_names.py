@@ -3,7 +3,7 @@ import random
 import sys
 import time 
 from constants import *
-from Create_class2 import *
+from Card_class_main_algorithm import *
 
 all_cards = SetAlgorithms.generate_all_cards()
 card_to_draw = random.choice(all_cards)[0]
@@ -18,4 +18,16 @@ Color_names = {1: 'green', 2: 'red', 3: 'purple'}
 Filling_names = {1: 'empty', 2: 'striped', 3: 'filled'}
 Shapes_names = {1: 'diamond', 2: 'oval', 3: 'squiggle'}
 
-#def translator_cardnames(card_to_draw): 
+def list_pic_gen(card): 
+    color_pic = Color_names[card[0]]
+    shape_pic = Shapes_names[card[3]]
+    fill_pic = Filling_names[card[2]]
+    quantity_pic = card[1]
+    return f"{color_pic}{shape_pic}{fill_pic}{quantity_pic}"
+
+print(Card(1,2,3,3))
+
+all_cards = SetAlgorithms.generate_all_cards()
+card_to_draw = random.choice(all_cards)
+
+print(list_pic_gen(card_to_draw))

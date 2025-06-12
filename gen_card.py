@@ -3,7 +3,7 @@ import random
 import sys
 import time 
 from constants import *
-from Create_class2 import *
+from Card_class_main_algorithm import *
 
 # Start game 
 pygame.init()
