@@ -1,8 +1,8 @@
 ## Create constants that will be used in the main pygame file
 
 background_col = (190, 190, 190, 255)
-display_width = 1200
-display_height = 800
+display_width = 800
+display_height = 500
 
 
 

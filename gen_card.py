@@ -4,6 +4,7 @@ import sys
 import time 
 from constants import *
 from Card_class_main_algorithm import *
+from convert_card_names import draw_random_card
 
 # Start game 
 pygame.init()
@@ -17,10 +18,12 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Set")
 gameDisplay.fill(background_col)
 
-card_to_draw = random.SetAlgorithms.generate_all_cards()
-print(card_to_draw)
+#card_to_draw = random.SetAlgorithms.generate_all_cards()
+#print(card_to_draw)
 
-plaatje = pygame.image.load('kaarten/' + card_to_draw + '.gif').convert()
+random_card = draw_random_card()
+print("random card", random_card)
+plaatje = pygame.image.load('kaarten/' + str(random_card) + '.gif').convert()
 scrn = pygame.display.set_mode((0,0))
 scrn.blit(plaatje, (0,0))
 pygame.display.flip()
