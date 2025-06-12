@@ -35,12 +35,13 @@ class Card:
         else:
             raise IndexError("Card only has 4 elements: index 0 through 3")
     
-    def __repr__(self):
-        # Shows as a list-like string representation
-        return repr([self.col, self.qt, self.fil, self.sh])
+    #def __repr__(self):
+    #    # Shows as a list-like string representation
+    #    return repr([self.col, self.qt, self.fil, self.sh])
 
 # dit is ook leuk om te testen:P    > is t nu nog leuker geworden na deze geweldige updates van Card??:D
 
+Card(1,2,3,3)
 card1 = Card(1,2,3,3)
 print(card1)
 print(card1[0])
