@@ -32,17 +32,15 @@ def gen_first_deck(a_deck):
 print("generate names as in kaarten", gen_first_deck(random_deck_cards))
 
 random_deck_named = gen_first_deck(random_deck_cards)
-for i in range(0, len(random_deck_named)): 
-    if 0 <= i <= 2: 
-        card = pygame.image.load(f'kaarten/{random_deck_named[i]}.gif').convert()
-        gameDisplay.blit(card, (100 + i * 120, 100))  # Space them out horizontally
-    elif 3 <= i <= 5:     
-        gameDisplay.blit(card, (-260 + i * 120, 300))
-    elif 6 <= i <= 8: 
-        gameDisplay.blit(card, (-620 + i * 120, 500)) 
-    elif 9 <= i <= 11:     
-        gameDisplay.blit(card, (-980 + i * 120, 300))
 
+for i in range(0, len(random_deck_named)): 
+    card = pygame.image.load(f'kaarten/{random_deck_named[i]}.gif').convert()
+    if 0 <= i <= 3: 
+        gameDisplay.blit(card, (100 + i * 120, 100))  # Space them out horizontally
+    elif 4 <= i <= 7:     
+        gameDisplay.blit(card, (-380 + i * 120, 325))
+    elif 8 <= i <= 11: 
+        gameDisplay.blit(card, (-860 + i * 120, 550)) 
 
 
 
