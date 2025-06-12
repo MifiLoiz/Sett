@@ -17,12 +17,14 @@ def list_pic_gen(card):
     quantity_pic = card[1]
     return f"{color_pic}{shape_pic}{fill_pic}{quantity_pic}"
 
+print(Card(1,2,3,3))
+print(list_pic_gen(Card(1,2,3,3)))
 
 def draw_random_card(): 
     all_cards = SetAlgorithms.generate_all_cards()
     one_card = random.choice(all_cards)
     return list_pic_gen(one_card)
 
-print(draw_random_card())
+#print(draw_random_card())
 
-print(f"{draw_random_card()}")
+#print(f"{draw_random_card()}")

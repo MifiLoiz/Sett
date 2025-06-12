@@ -4,7 +4,15 @@ import sys
 import time 
 from constants import *
 from Card_class_main_algorithm import *
-from convert_card_names import draw_random_card
+from convert_card_names import draw_random_card, list_pic_gen
+
+""" 
+Ideëen voor later: 
+    De eerste deck kan gwn random zijn, maar de de volgende kaarten mogen niet nog een keer opgelegd worden. 
+    Het spel zou in theorie moeten kunnen eindigen als alle kaarten op zijn gedeeld (en er geen zetten meer mogelijk zijn)
+    Buttons: pauze, hint 
+
+"""
 
 # Start game 
 pygame.init()
@@ -12,20 +20,19 @@ pygame.init()
 # Clock
 clock = pygame.time.Clock()     # of: pygame.time.get_ticks()
 
-# Draw card display 
+# Set screen
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 
 pygame.display.set_caption("Set")
 gameDisplay.fill(background_col)
 
-#card_to_draw = random.SetAlgorithms.generate_all_cards()
-#print(card_to_draw)
-
+# Draw random card  
 random_card = draw_random_card()
-print("random card", random_card)
+
 plaatje = pygame.image.load('kaarten/' + str(random_card) + '.gif').convert()
-scrn = pygame.display.set_mode((0,0))
-scrn.blit(plaatje, (0,0))
+gameDisplay.blit(plaatje, (500, 100))
+
+# Display what is drawn 
 pygame.display.flip()
 
 # Exit
