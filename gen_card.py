@@ -10,7 +10,7 @@ from convert_card_names import draw_random_card, list_pic_gen
 Ideëen voor later: 
     De eerste deck kan gwn random zijn, maar de de volgende kaarten mogen niet nog een keer opgelegd worden. 
     Het spel zou in theorie moeten kunnen eindigen als alle kaarten op zijn gedeeld (en er geen zetten meer mogelijk zijn)
-    Buttons: pauze, hint 
+    Buttons: pauze, hint, shuffle
 
 """
 
