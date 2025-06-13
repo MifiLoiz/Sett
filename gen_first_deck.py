@@ -19,7 +19,7 @@ pygame.display.set_caption("Set")
 gameDisplay.fill(background_col)
 
 # Draw random deck 
-random_deck_cards = random.choices(SetAlgorithms.generate_all_cards(), k=12) 
+random_deck_cards = random.sample(SetAlgorithms.generate_all_cards(), k=12) 
 print("random cards", random_deck_cards)
 
 ## function that turns any amount of cards into names as in kaarten
