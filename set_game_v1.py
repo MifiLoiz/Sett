@@ -4,6 +4,7 @@ import time
 from constants import *
 from Card_class_main_algorithm import *
 from gen_first_deck import *
+from convert_card_names import * 
 
 # Initialize game and set parameters
 pygame.init()

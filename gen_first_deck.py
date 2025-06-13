@@ -4,11 +4,10 @@ import sys
 import time 
 from constants import *
 from Card_class_main_algorithm import *
-from convert_card_names import draw_random_card, list_pic_gen
+from convert_card_names import *
 
 """
 Overview of important functions and variables: 
-    gen_named_deck()    - given any amount of cards, match the card correspond to in the filenames in kaarten
     num_cards_table     - keeps track of the number of cards that are present on the table
     display_12_cards()  - given a 12 cards (names correspond to kaarten), display these on the table
     
@@ -21,11 +20,7 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 random_deck_cards = random.sample(SetAlgorithms.generate_all_cards(), k=12) 
 
 ## function that turns any amount of cards into names as in kaarten
-def gen_named_cards(a_deck): 
-    random_deck_names = []
-    for i in range(0, len(a_deck)): 
-        random_deck_names.append(list_pic_gen(a_deck[i]))
-    return random_deck_names
+
 
 random_deck_named = gen_named_cards(random_deck_cards)
 
