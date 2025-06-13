@@ -2,7 +2,10 @@ import pygame
 import sys
 import time 
 from constants import *
+from Card_class_main_algorithm import *
+from gen_first_deck import *
 
+# Initialize game and set parameters
 pygame.init()
 
 clock = pygame.time.Clock()     # of: pygame.time.get_ticks()
@@ -12,12 +15,22 @@ gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption("Set")
 gameDisplay.fill(background_col)
 
+# The game
+a_first_deck = random.sample(SetAlgorithms.generate_all_cards(), k=12) 
+a_first_named_deck = gen_named_cards(a_first_deck)
+display_12_cards(random_deck_named)
 
-plaatje = pygame.image.load('kaarten/' + "greendiamondempty1" + '.gif').convert()
-scrn = pygame.display.set_mode((0,0))
-scrn.blit(plaatje, (0,0))
+possible_sets = SetAlgorithms.find_all_set(a_first_deck)
+if not len(possible_sets) > 0: 
+    print("no sets possible!")
+    replace_3_cards() 
+    
+#print("fin all sets", SetAlgorithms.find_all_set(a_first_deck))
+
+# Display drawings
 pygame.display.flip()
 
+# Exit the game
 exit = False
 
 while not exit:

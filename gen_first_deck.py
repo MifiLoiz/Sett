@@ -8,36 +8,35 @@ from convert_card_names import draw_random_card, list_pic_gen
 
 """
 Overview of important functions and variables: 
-    gen_first_deck()    - generates 12 random cards, whose names correspond to the filenames in kaarten
+    gen_named_deck()    - given any amount of cards, match the card correspond to in the filenames in kaarten
     num_cards_table     - keeps track of the number of cards that are present on the table
     display_12_cards()  - given a 12 cards (names correspond to kaarten), display these on the table
+    
 """
 
-# Start game 
-pygame.init()
-
-# Clock
-clock = pygame.time.Clock()     # of: pygame.time.get_ticks()
-
-# Set screen
+# Parameters
 gameDisplay = pygame.display.set_mode((display_width, display_height))
-
-pygame.display.set_caption("Set")
-gameDisplay.fill(background_col)
 
 # Draw random deck 
 random_deck_cards = random.sample(SetAlgorithms.generate_all_cards(), k=12) 
 
 ## function that turns any amount of cards into names as in kaarten
-def gen_first_deck(a_deck): 
+def gen_named_cards(a_deck): 
     random_deck_names = []
-    for i in range(0, 12): 
+    for i in range(0, len(a_deck)): 
         random_deck_names.append(list_pic_gen(a_deck[i]))
     return random_deck_names
 
+random_deck_named = gen_named_cards(random_deck_cards)
 
-random_deck_named = gen_first_deck(random_deck_cards)
+print("random cards: ", random_deck_cards)
+print("random named cards: ", random_deck_named)
 
+# Remove 3 cards and replace them
+def replace_3_cards(): 
+    pass
+
+# Function that displays 12 given cards 
 def display_12_cards(deck_cards): 
     for i in range(0, len(deck_cards)): 
         card = pygame.image.load(f'kaarten/{deck_cards[i]}.gif').convert()
@@ -51,20 +50,4 @@ def display_12_cards(deck_cards):
         elif 8 <= i <= 11: 
             gameDisplay.blit(card, (-860 + i * 120, 550))
             num_cards_table += 1 
-
-display_12_cards(random_deck_named)
-
-
-# Display what is drawn 
-pygame.display.flip()
-
-# Exit
-exit = False
-
-while not exit:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            exit = True
-    pygame.display.update()
-
 

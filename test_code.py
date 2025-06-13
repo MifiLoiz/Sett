@@ -22,3 +22,9 @@ def gen_first_deck(a_deck):
 
 lijst = [14,18,156,13]
 print(random.choices(lijst, k=2))
+
+
+
+#plaatje = pygame.image.load('kaarten/' + "greendiamondempty1" + '.gif').convert()
+#scrn = pygame.display.set_mode((0,0))
+#scrn.blit(plaatje, (0,0))

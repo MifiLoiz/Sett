@@ -11,6 +11,7 @@ Ideëen voor later:
     De eerste deck kan gwn random zijn, maar de de volgende kaarten mogen niet nog een keer opgelegd worden. 
     Het spel zou in theorie moeten kunnen eindigen als alle kaarten op zijn gedeeld (en er geen zetten meer mogelijk zijn)
     Buttons: pauze, hint, shuffle
+    Display: is a set possible? 
 
 """
 
