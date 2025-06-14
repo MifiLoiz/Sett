@@ -340,19 +340,7 @@ if __name__ == "__main__":
     game = SetGame()
     game.run()
 
-def card_to_filename(card: Card):
-    # First create the filename using the dictionary
-    filename = f"{Color_names[card.col_num]}{Shapes_names[card.sh_num]}{Filling_names[card.fil_num]}{card.qt_num}.gif"
-    
-    # Print debug information
-    print("\nCard properties:")
-    print(f"Color: {card.col_num} -> {Color_names[card.col_num]}")
-    print(f"Shape: {card.sh_num} -> {Shapes_names[card.sh_num]}")
-    print(f"Filling: {card.fil_num} -> {Filling_names[card.fil_num]}")
-    print(f"Quantity: {card.qt_num}")
-    print(f"Generated filename: {filename}")
-    
-    return filename
+
 #issues: 
 # after adding 3 cards, it never returns to 12 
 # there isnt time to look at the match the computer found
