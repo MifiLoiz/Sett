@@ -271,10 +271,23 @@ class SetGame:
 
     def replace_cards(self, indices):
         indices = sorted(indices, reverse=True)  # sort indices in reverse order to avoid index errors
-        for i in indices:
-            if i < len(self.table_cards) and self.deck: # checks if index is within bounds
-                self.table_cards[i] = self.deck.pop()
-            
+        
+        # if table would be lacking cards after removing or no sets possible
+        if len(self.table_cards) <= INITIAL_CARDS: 
+            for i in indices:
+                if i < len(self.table_cards) and self.deck: # checks if index is within bounds
+                    self.table_cards[i] = self.deck.pop()
+        
+        elif len(self.table_cards) > INITIAL_CARDS:
+            if min(indices) > len(self.table_cards) - 3:    # in case the selected cards are the final ones 
+                # in case the removed cards are 
+                for i in indices:
+                    if i < len(self.table_cards) and self.deck: # checks if index is within bounds
+                        del self.table_cards[i]
+            else:   # so, the selected cards are spread over the first cards, so now the remaining cards must squeeze in 
+                for i in indices:
+                    self.table_cards[i] = self.table_card.pop[-1]
+
         while len(self.table_cards) < INITIAL_CARDS and self.deck:
             self.table_cards.append(self.deck.pop()) # adds cards until we have the initial number of cards
                
@@ -318,12 +331,15 @@ class SetGame:
             return #Don't allow new turns during the pause
         
         #computer's turn to find a set
+        
         found_set = SetAlgorithms.find_one_set(self.table_cards)
+        
+        # game ends when the deck of cards is empty and no sets remain
         if len(self.deck) == 0 and not found_set: 
             #ie, when theres no new found set and we have run out of cards: 
-            #self.message = "Game has ended"
-            #self.message_color = (0,0,0)  # black color for no game ended message
             game_over_trigger = True
+        
+        # when a set is found: 
         elif found_set and SetAlgorithms.is_valid_set(*found_set):
             self.computer_last_set_indices = [self.table_cards.index(card) for card in found_set]
             self.computer_score += 1
@@ -335,7 +351,7 @@ class SetGame:
             self.computer_processing = True # Start pause lock
             return True
         
-        # If no valid sets, two cases: add three cards or end the game  ELIZA   
+        # If no valid sets and there are still cards remaining:  
         elif not found_set and len(self.deck) != 0:
             # if no valid set is found, computer adds 3 cards
             if self.deck:
@@ -344,8 +360,8 @@ class SetGame:
                 self.message_color = (0,0,0)  # black color for no set message
                 self.message_time = time.time()
                 # Checks if the games should end, clean the table, makes sure the computer is done with processing the set  ##ELIZA Q: does this work? 
-                self.clean_up_table() 
-                self.check_game_over()
+                #self.clean_up_table() 
+                #self.check_game_over()
             self.computer_processing = False
             return False
 
