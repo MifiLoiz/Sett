@@ -103,6 +103,7 @@ class SetGame:
         return positions
     
     def draw_cards(self):
+        global pause_switch
         #draw all cards with proper spacing
         self.screen.fill((200, 200, 200))
 
@@ -114,6 +115,9 @@ class SetGame:
         #shows pause 
         if self.paused:
             self.draw_text("Game Paused", DISPLAY_WIDTH - 120, 30, self.small_font, color=(255, 0, 0),)
+            pause_switch = True 
+        else: 
+            pause_switch = False
         
         #draw cards
         positions = self.calculate_card_positions()  # calculates positions for the cards
@@ -195,7 +199,7 @@ class SetGame:
         if time.time() < self.computer_pause_end:
             return  # ignore keyboard input during computer's pause
         
-        if pygame.K_0 <= event.key <= pygame.K_9:
+        if pygame.K_0 <= event.key <= pygame.K_9 and not pause_switch:
             index = event.key - pygame.K_0 # 0 = 0, 1 = 1, ..., 9 = 9
             if index == 0:
                 index = 9 # maps 0 to 10
@@ -215,13 +219,13 @@ class SetGame:
             max_offset = -((len(self.table_cards) // MAX_CARDS_PER_ROW) * (CARD_HEIGHT + MARGIN) - DISPLAY_HEIGHT + 200) # calculates max scroll offset based on number of cards
             self.scroll_offset = max(max_offset, self.scroll_offset - 20) #scrolls down through the cards
         
-        elif event.key == pygame.K_h:
+        elif event.key == pygame.K_h and not pause_switch:
             #if H is pressed, calls give_hint method
             self.give_hint()
         elif event.key == pygame.K_p:
             # if P is pressed, toggles pause state
             self.toggle_pause()
-        elif event.key == pygame.K_RETURN:
+        elif event.key == pygame.K_RETURN and not pause_switch:
             #if Enter is pressed, checks if the selected cards form a valid set
             self.check_user_set()
 
