@@ -273,16 +273,16 @@ class SetGame:
         indices = sorted(indices, reverse=True)  # sort indices in reverse order to avoid index errors
         
         # if table would be lacking cards after removing or no sets possible
-        if len(self.table_cards) <= INITIAL_CARDS: 
+        if len(self.table_cards) <= INITIAL_CARDS and self.deck: 
             for i in indices:
-                if i < len(self.table_cards) and self.deck: # checks if index is within bounds
+                if i < len(self.table_cards): # checks if index is within bounds
                     self.table_cards[i] = self.deck.pop()
         
         elif len(self.table_cards) > INITIAL_CARDS:
-            if min(indices) > len(self.table_cards) - 3:    # in case the selected cards are the final ones 
+            if min(indices) > len(self.table_cards) - 3 and self.deck:    # in case the selected cards are the final ones 
                 # in case the removed cards are 
                 for i in indices:
-                    if i < len(self.table_cards) and self.deck: # checks if index is within bounds
+                    if i < len(self.table_cards): # checks if index is within bounds
                         del self.table_cards[i]
             else:   # so, the selected cards are spread over the first cards, so now the remaining cards must squeeze in 
                 for i in indices:
