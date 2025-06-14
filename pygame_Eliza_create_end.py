@@ -16,13 +16,14 @@ MAX_CARDS_PER_ROW = 6
 MARGIN = 15
 DISPLAY_WIDTH = 1000
 DISPLAY_HEIGHT = 600
-TIMER_DURATION = 30  # seconds
+TIMER_DURATION = 3  # seconds
 CARD_FOLDER = "kaarten/"
 ICON_PATH = "SET_FamilyGames_digital-1.png"
 INITIAL_CARDS = 12  # initial number of cards on the table
 CARDS_TO_ADD = 3  # number of cards to add when no set is found
-MESSAGE_DURATION = 3  # seconds for message display
-COMPUTER_PAUSE = 3 #seconds to pause after computer finds set
+MESSAGE_DURATION = 1  # seconds for message display
+COMPUTER_PAUSE = 1 #seconds to pause after computer finds set
+game_over_trigger = False
 
 #Card naming maps
 Color_names = {1: 'green', 2: 'red', 3: 'purple'}
@@ -139,7 +140,6 @@ class SetGame:
                 elif card in self.hint_cards:
                     # draws green rectangle around hint cards
                     pygame.draw.rect(self.screen, (0, 255, 0), (card_x, card_y, CARD_WIDTH, CARD_HEIGHT), 3)
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 # Checks if this is the last set the computer has found and marks the found set blue
                 elif i in self.computer_last_set_indices and time.time() < self.computer_pause_end:
                     pygame.draw.rect(self.screen, (0,0,255), (card_x, card_y, CARD_WIDTH, CARD_HEIGHT), 3)
@@ -236,6 +236,7 @@ class SetGame:
     def select_card(self, index):
         #selects a card based on the index, if index is valid
         if index < len(self.table_cards):
+            print(self.selected_indices)
             if index in self.selected_indices:
                 self.selected_indices.remove(index)
             else:
@@ -257,6 +258,7 @@ class SetGame:
             if not self.hint_used:
                 self.user_score += 1
             self.replace_cards(self.selected_indices)
+            print(self.selected_indices)
             self.timer_start = time.time()  # resets the timer on valid set
         else:
             self.message = "Not a valid SET!"
@@ -311,11 +313,18 @@ class SetGame:
             self.message_time = time.time()  # sets the message time to current time
 
     def computer_turn(self):
+        global game_over_trigger
         if self.computer_processing:
             return #Don't allow new turns during the pause
+        
         #computer's turn to find a set
         found_set = SetAlgorithms.find_one_set(self.table_cards)
-        if found_set and SetAlgorithms.is_valid_set(*found_set):
+        if len(self.deck) == 0 and not found_set: 
+            #ie, when theres no new found set and we have run out of cards: 
+            #self.message = "Game has ended"
+            #self.message_color = (0,0,0)  # black color for no game ended message
+            game_over_trigger = True
+        elif found_set and SetAlgorithms.is_valid_set(*found_set):
             self.computer_last_set_indices = [self.table_cards.index(card) for card in found_set]
             self.computer_score += 1
             self.message = "Computer found a SET! +1 point"
@@ -325,19 +334,21 @@ class SetGame:
             self.computer_set_found_time = time.time()
             self.computer_processing = True # Start pause lock
             return True
-        else:
+        
+        # If no valid sets, two cases: add three cards or end the game  ELIZA   
+        elif not found_set and len(self.deck) != 0:
             # if no valid set is found, computer adds 3 cards
             if self.deck:
                 self.add_cards(min(CARDS_TO_ADD, len(self.deck))) # max 3 cards can be added
                 self.message = "No sets found, added 3 cards."
                 self.message_color = (0,0,0)  # black color for no set message
                 self.message_time = time.time()
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
-                # Checks if the games should end, clean the table, makes sure the computer is done with processing the set
+                # Checks if the games should end, clean the table, makes sure the computer is done with processing the set  ##ELIZA Q: does this work? 
                 self.clean_up_table() 
                 self.check_game_over()
             self.computer_processing = False
             return False
+
 
     def update_timer(self):
         #updates the timer and checks if the time is up
@@ -393,6 +404,14 @@ class SetGame:
             else:
                 self.draw_text(self.message, DISPLAY_WIDTH // 2-100, DISPLAY_HEIGHT//2, self.font, (200,0,0))
                 pygame.display.flip()
+            
+            if game_over_trigger == True: 
+                time_till_quit = pygame.time.get_ticks() + 3000
+
+            if game_over_trigger == True and pygame.time.get_ticks() >= time_till_quit: 
+                pygame.quit()
+                sys.exit()
+
         pygame.quit()
         sys.exit()
 
