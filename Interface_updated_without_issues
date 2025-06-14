@@ -294,13 +294,6 @@ class SetGame:
             self.message = "Game Over!"
             self.message_color = (50,50,50)
             self.message_time = time.time()
-#!!!!!!!!!!!!!!!!!!!!!!!!!
-    # Finds valid set 
-    def find_one_set(cards):
-        for card1, card2, card3 in combinations(cards, 3):
-            if SetAlgorithms.is_valid_set(card1, card2, card3):
-                return [card1, card2, card3]
-            return None
 
     def give_hint(self):
         #provides a hint by finding a valid set and selecting two of its cards
