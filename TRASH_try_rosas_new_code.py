@@ -111,23 +111,20 @@ class SetGame:
         #draws current score and timer on top left corner
         self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
-        self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 145, 45, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"Time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 145, 45, self.font, (255,0,0)) #draws timer on top right corner
         
         #shows pause 
         if self.paused:
             self.draw_text("Game Paused", DISPLAY_WIDTH - 145, 27, self.small_font, color=(255, 0, 0),)
             pause_switch = True 
-            #print(pause_switch)
             
-            ## ELIZA WANTS: als dit, dan verschijn een zwart scherm/blok zodat je de kaarten niet ziet (Pappa vond ook dat dit erin moest)
-            pygame.draw.rect(self.screen, (153, 50, 204), (40, 70, 950, 400))
+            ## ELIZA WAS HERE: works!! 
             pause_png = pygame.image.load(f"paused_blop.png")
-            pause_png = pygame.transform.scale(pause_png, (CARD_WIDTH - 10, CARD_HEIGHT - 10))  # scales the image to fit the card size
-            self.screen.blit(pause_png, (50, 90))  # draws the card image with a small margin 
+            pause_png = pygame.transform.scale(pause_png, (900, 600))  # scales the image to fit the card size
+            self.screen.blit(pause_png, (10, 5))  # draws the card image with a small margin 
 
         else: 
             pause_switch = False
-            #print(pause_switch)
         
         #draw cards
         positions = self.calculate_card_positions()  # calculates positions for the cards
@@ -175,14 +172,22 @@ class SetGame:
         for i, text in enumerate(instructions):
             self.draw_text(text, MARGIN, DISPLAY_HEIGHT - 80 + i * 25, self.small_font)
 
+## ELIZA WAS HERE - dit moet goed worden 
         if self.message and time.time() - self.message_time < MESSAGE_DURATION:
-            msg_surface = self.font.render(self.message, True, self.message_color) # renders the message text
-            self.screen.blit(msg_surface, (DISPLAY_WIDTH // 2 - msg_surface.get_width() // 2, DISPLAY_HEIGHT - 30)) # draws message at the bottom of the screen
+            #msg_surface = self.font.render(self.message, True, self.message_color) # renders the message text
+            #self.screen.blit(msg_surface, (DISPLAY_WIDTH // 2 - msg_surface.get_width() // 2, DISPLAY_HEIGHT - 30)) # draws message at the bottom of the screen
 
+            self.screen.blit(self.message, (250, 375))  # draws the card image with a small margin 
+
+# VANAF HIER WERKT HET 
         if self.computer_last_set_indices and time.time() < self.computer_pause_end:
-            comp_msg = "Computer found set: " + ", ".join(str(i + 1) for i in self.computer_last_set_indices)
-            comp_surface = self.small_font.render(comp_msg, True, (200, 0, 0))
-            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 60))
+            comp_png = pygame.image.load(f"set_computer.png")
+            comp_png = pygame.transform.scale(comp_png, (450, 250))  # scales the image to fit the card size
+            self.screen.blit(comp_png, (250, 375))  # draws the card image with a small margin 
+            
+            comp_msg = "Cards of SET: " + ", ".join(str(i + 1) for i in self.computer_last_set_indices)
+            comp_surface = self.small_font.render(comp_msg, True, (0, 0, 0))
+            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 110))   # tweede coordinaat was: DISPLAY_HEIGHT - 60
 
         #updates the screen
         pygame.display.flip()
@@ -275,8 +280,19 @@ class SetGame:
         cards = [self.table_cards[i] for i in self.selected_indices]
         #*cards unpacks the list into individual card objects
         if SetAlgorithms.is_valid_set(*cards):
-            self.message = "Valid SET found!" + (" +1 point" if not self.hint_used else " No points for hint used")
-            self.message_color = (255, 105, 189) # pink color for valid set message
+## ELIZA WAS HERE             
+            set_self_img = pygame.image.load(f"set_1point.png")
+            set_self_img = pygame.transform.scale(set_self_img, (450, 250))  # scales the image to fit the card size
+            #self.screen.blit(set_self_img, (250, 375))  # draws the card image with a small margin 
+
+            set_hint_img = pygame.image.load(f"set_hint.png")
+            set_hint_img = pygame.transform.scale(set_hint_img, (450, 250))  # scales the image to fit the card size
+            #self.screen.blit(set_hint_img, (250, 375))  # draws the card image with a small margin             
+
+            self.message = (set_self_img if not self.hint_used else set_hint_img)
+            #self.message_color = (255, 105, 189) # pink color for valid set message
+## TOT HIER             
+            
             if not self.hint_used:
                 self.user_score += 1
             self.replace_cards(self.selected_indices)
@@ -375,8 +391,8 @@ class SetGame:
         elif found_set and SetAlgorithms.is_valid_set(*found_set):
             self.computer_last_set_indices = [self.table_cards.index(card) for card in found_set]
             self.computer_score += 1
-            self.message = "Computer found a SET! +1 point"
-            self.message_color = (200,0,20) # dark red color for computer's valid set message
+            #self.message = "Computer found a SET! +1 point"
+            #self.message_color = (200,0,20) # dark red color for computer's valid set message
             self.message_time = time.time()  # sets the message time to current time
             self.computer_pause_end = time.time() + COMPUTER_PAUSE  # sets the pause end time for computer's turn
             self.computer_set_found_time = time.time()
