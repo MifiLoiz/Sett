@@ -1,8 +1,3 @@
-# test code
-# old pygame_Eliza_create_and.py code
-import pygame 
-import random
-import sys
 import pygame
 import random
 import time
