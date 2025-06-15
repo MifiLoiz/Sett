@@ -16,13 +16,13 @@ MAX_CARDS_PER_ROW = 6
 MARGIN = 15
 DISPLAY_WIDTH = 1000
 DISPLAY_HEIGHT = 600
-TIMER_DURATION = 3  # seconds
+TIMER_DURATION = 30  # seconds
 CARD_FOLDER = "kaarten/"
 ICON_PATH = "SET_FamilyGames_digital-1.png"
 INITIAL_CARDS = 12  # initial number of cards on the table
 CARDS_TO_ADD = 3  # number of cards to add when no set is found
-MESSAGE_DURATION = 1  # seconds for message display
-COMPUTER_PAUSE = 1 #seconds to pause after computer finds set
+MESSAGE_DURATION = 3  # seconds for message display
+COMPUTER_PAUSE = 3 #seconds to pause after computer finds set
 game_over_trigger = False
 
 #Card naming maps
@@ -110,11 +110,11 @@ class SetGame:
         #draws current score and timer on top left corner
         self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
-        self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 100, 50, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 145, 45, self.font, (255,0,0)) #draws timer on top right corner
         
         #shows pause 
         if self.paused:
-            self.draw_text("Game Paused", DISPLAY_WIDTH - 120, 30, self.small_font, color=(255, 0, 0),)
+            self.draw_text("Game Paused", DISPLAY_WIDTH - 145, 27, self.small_font, color=(255, 0, 0),)
             pause_switch = True 
         else: 
             pause_switch = False
@@ -138,6 +138,11 @@ class SetGame:
                     pygame.draw.rect(self.screen, (200, 200, 200), (card_x, card_y, CARD_WIDTH, CARD_HEIGHT))  # draws a grey rectangle for missing card image
                     self.draw_text(f"Card{i+1}", card_x + 10, card_y + 60, self.small_font)
 
+                # Inside the card drawing loop, after drawing the card image:
+                # Draw card number/index
+                card_number_text = self.small_font.render(str(i+1), True, (0, 0, 0))
+                self.screen.blit(card_number_text, (card_x + 5, card_y + 5))
+                
                 if i in self.selected_indices:
                     # draws red rectangle around selected cards
                     pygame.draw.rect(self.screen, (255, 0, 0), (card_x, card_y, CARD_WIDTH, CARD_HEIGHT), 3)
@@ -257,7 +262,7 @@ class SetGame:
         cards = [self.table_cards[i] for i in self.selected_indices]
         #*cards unpacks the list into individual card objects
         if SetAlgorithms.is_valid_set(*cards):
-            self.message = "Valid SET found!" + (" +1 point" if not self.hint_used else "")
+            self.message = "Valid SET found!" + (" +1 point" if not self.hint_used else " No points for hint used")
             self.message_color = (255, 105, 189) # pink color for valid set message
             if not self.hint_used:
                 self.user_score += 1
@@ -272,11 +277,22 @@ class SetGame:
         self.selected_indices.clear()
         self.hint_used = False
         self.hint_cards = []
-
+    #!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def replace_cards(self, indices):
-        indices = sorted(indices, reverse=True)  # sort indices in reverse order to avoid index errors
+        indices = sorted(indices, reverse=True)  # sort indices in reverse order to avoid index errorsh
+  
+        # always remove the set cards first
+        for i in indices:
+            if i < len(self.table_cards):
+                del self.table_cards[i]
         
-        # if table would be lacking cards after removing or no sets possible
+        # only add new cards if we're below INITIAL_CARDS (12)
+        # AND only if this was a set found in the base 12 cards
+        if len(self.table_cards) < INITIAL_CARDS and self.deck:
+            #add cards until we're back to INITIAL_CARDS
+            while len(self.table_cards) < INITIAL_CARDS and self.deck:
+                self.table_cards.append(self.deck.pop())
+        '''
         if len(self.table_cards) <= INITIAL_CARDS and self.deck: 
             for i in indices:
                 if i < len(self.table_cards): # checks if index is within bounds
@@ -294,7 +310,7 @@ class SetGame:
 
         while len(self.table_cards) < INITIAL_CARDS and self.deck:
             self.table_cards.append(self.deck.pop()) # adds cards until we have the initial number of cards
-               
+        '''       
     def add_cards(self,count):
         for _ in range(count):
             if self.deck:
@@ -335,7 +351,6 @@ class SetGame:
             return #Don't allow new turns during the pause
         
         #computer's turn to find a set
-        
         found_set = SetAlgorithms.find_one_set(self.table_cards)
         
         # game ends when the deck of cards is empty and no sets remain
@@ -363,6 +378,9 @@ class SetGame:
                 self.message = "No sets found, added 3 cards."
                 self.message_color = (0,0,0)  # black color for no set message
                 self.message_time = time.time()
+                # reset timer to give player time to look at new cards
+                self.timer_start = time.time()  # resets the timer on computer's turn
+                self.time_remaining = TIMER_DURATION
                 # Checks if the games should end, clean the table, makes sure the computer is done with processing the set  ##ELIZA Q: does this work? 
                 #self.clean_up_table() 
                 #self.check_game_over()
