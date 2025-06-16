@@ -102,19 +102,23 @@ class SetGame:
         #draws current score and timer on top left corner
         self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
-        self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 100, 50, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 125, 50, self.font, (255,0,0)) #draws timer on top right corner
         
          
         #shows pause 
         if self.paused:
             self.draw_text("Game Paused", DISPLAY_WIDTH - 145, 27, self.small_font, color=(255, 0, 0),)
             pause_switch = True 
-            
+            try: 
             ## ELIZA WAS HERE: works!! 
-            pause_png = pygame.image.load(f"paused_blop.png")
-            pause_png = pygame.transform.scale(pause_png, (900, 600))  # scales the image to fit the card size
-            self.screen.blit(pause_png, (10, 5))  # draws the card image with a small margin 
-        
+                pause_png = pygame.image.load(f"paused_blop.png")
+                pause_png = pygame.transform.scale(pause_png, (900, 600))  # scales the image to fit the card size
+                self.screen.blit(pause_png, (10, 5))  # draws the card image with a small margin 
+            except:
+                self.draw_taxt("PAUSED", DISPLAY_WIDTH // 2 -50, DISPLAY_HEIGHT // 2, self.font, (255,0,0))
+            
+            pygame.display.flip()
+            return # Prevents drawing cards and hints while being paused
         else: 
             pause_switch = False
         
@@ -178,6 +182,9 @@ class SetGame:
         pygame.display.flip()
 
     def handle_click(self, pos):
+        if self.paused or time.time() < self.computer_pause_end:
+            return # Ignores clicks during pauses and computer processing
+
         if time.time() < self.computer_pause_end:
             return  # ignore clicks during computer's pause
         
@@ -203,6 +210,14 @@ class SetGame:
                     break
 
     def handle_keyboard_input(self,event):
+        if event.key == pygame.K_p:
+            # Makes sure that you can unpause when being paused even though the system ignores any clicks of the keyboard
+            self.toggle_pause()
+            return 
+        
+        if self.paused or time.time() < self.computer_pause_end:
+            return # Ignores all other clicks during pauses and computer processing
+        
         if time.time() < self.computer_pause_end:
             return  # ignore keyboard input during computer's pause
         
