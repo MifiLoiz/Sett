@@ -417,6 +417,7 @@ class SetGame:
                 self.hint_used = False
                 self.hint_cards = []
                 self.check_game_over()
+                # Makes sure the game if finished, before adding the game over message
                 if not self.computer_processing and not self.computer_set_found_time:
                     if not SetAlgorithms.find_one_set(self.table_cards) and not self.deck:
                         self.game_over = True
