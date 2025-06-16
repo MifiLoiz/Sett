@@ -100,19 +100,10 @@ class SetGame:
         self.screen.fill((200, 200, 200))
 
         #draws current score and timer on top left corner
-        score_png = pygame.image.load(f"scores.png")
-        score_png = pygame.transform.scale(score_png, (700,300))  # scales the image to fit the card size
-        self.screen.blit(score_png, (1,1))
-
-        self.draw_text(f"{self.user_score}", 20, 10, self.font) #draws user score on top left corner
-        self.draw_text(f"{self.computer_score}", 20, 40, self.font) #draws computer score below user score
+        self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
+        self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
+        self.draw_text(f"Time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 145, 45, self.font, (255,0,0)) #draws timer on top right corner
         
-        time_png = pygame.image.load(f"time.png")
-        time_png = pygame.transform.scale(time_png, (400,245))  # scales the image to fit the card size
-        self.screen.blit(time_png, (630,4))        
-        self.draw_text(f"{int(self.time_remaining)}s", DISPLAY_WIDTH - 125, 48, self.font, (255,0,0)) #draws timer on top right corner
-        
-         
         #shows pause 
         if self.paused:
             self.draw_text("Game Paused", DISPLAY_WIDTH - 145, 27, self.small_font, color=(255, 0, 0),)
@@ -129,12 +120,6 @@ class SetGame:
             return # Prevents drawing cards and hints while being paused
         else: 
             pause_switch = False
-        
-        #draw instructions
-        instructions_png = pygame.image.load(f"instructions.png")
-        instructions_png = pygame.transform.scale(instructions_png, (450,250))  # scales the image to fit the card size
-        self.screen.blit(instructions_png, (MARGIN - 90, DISPLAY_HEIGHT - 150))
-
         
         #draw cards
         positions = self.calculate_card_positions()  # calculates positions for the cards
@@ -165,10 +150,15 @@ class SetGame:
                 elif i in self.computer_last_set_indices and time.time() < self.computer_pause_end:
                     pygame.draw.rect(self.screen, (0,0,255), (card_x, card_y, CARD_WIDTH, CARD_HEIGHT), 3)
 
-#        #draw instructions
-#        instructions_png = pygame.image.load(f"instructions.png")
-#        instructions_png = pygame.transform.scale(instructions_png, (450,250))  # scales the image to fit the card size
-#        self.screen.blit(instructions_png, (MARGIN - 90, DISPLAY_HEIGHT - 150))
+        #draw instructions
+        instructions = [
+            "Hint: H | Pause: P | Confirm: Enter",
+            "Select: 1-9 | 0 = 10 | Shift + 1-9 = 11-19",
+            "Scroll: up/down arrow keys", #scrolls through cards
+        ]
+
+        for i, text in enumerate(instructions):
+            self.draw_text(text, MARGIN, DISPLAY_HEIGHT - 80 + i * 25, self.small_font)
 
 ## ELIZA WAS HERE - dit moet goed worden 
 ## !!!!!!Anouk was here - dit werkt nu ook, ik heb zegmaar if, else conditie toegeoegt
@@ -370,8 +360,12 @@ class SetGame:
             self.game_over = True
             
             # determine whether user wins or loses
-            self.message = "Game Over!"
-            self.message_color = (50,50,50)
+            if self.user_score >= self.computer_score:  
+                self.message = "Game Won!"
+                self.message_color = (50,50,50)
+            else: 
+                self.message = "Game Over!"
+                self.message_color = (50,50,50)
             self.message_time = time.time()
 
     def give_hint(self):
