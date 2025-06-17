@@ -65,6 +65,7 @@ class SetGame:
         self.computer_set_found_time = None # time when computer finds a set
         self.computer_pause_duration = 3 #3 seconds pause
         self.computer_processing = False #To make sure that we can continue the game and the computer does not take over
+        self.game_over_image = None #Image that is shown when the game has ended
 
     def draw_text(self, text, x, y, font=None, color=(0, 0, 0)):
         #helps to draw text on the screen at (x,y) position with specified font and color
@@ -104,7 +105,6 @@ class SetGame:
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
         self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 125, 50, self.font, (255,0,0)) #draws timer on top right corner
         
-         
         #shows pause 
         if self.paused:
             self.draw_text("Game Paused", DISPLAY_WIDTH - 145, 27, self.small_font, color=(255, 0, 0),)
@@ -140,6 +140,10 @@ class SetGame:
                     #fallback if image is not found
                     pygame.draw.rect(self.screen, (200, 200, 200), (card_x, card_y, CARD_WIDTH, CARD_HEIGHT))  # draws a grey rectangle for missing card image
                     self.draw_text(f"Card{i+1}", card_x + 10, card_y + 60, self.small_font)
+
+                # Gives the card a number of its position, to make keyboard use easier for users
+                card_number_text = self.small_font.render(str(i+1), True, (0,0,0))
+                self.screen.blit(card_number_text, (card_x + 5, card_y +5))
 
                 if i in self.selected_indices:
                     # draws red rectangle around selected cards
@@ -345,12 +349,26 @@ class SetGame:
             self.remove_top_cards(CARDS_TO_ADD)
 
     # Determines the end of the game
+    # We need to add a gelijkspel image still
     def check_game_over(self):
         if not SetAlgorithms.find_one_set(self.table_cards) and not self.deck:
             self.game_over = True
-            self.message = "Game Over!"
-            self.message_color = (50,50,50)
-            self.message_time = time.time()
+
+            if self.user_score > self.computer_score:
+                winner_image = "gameover_user.png" 
+            elif self.user_score < self.computer_score:
+                winner_image = "gameover_comp.png"
+            else:
+                winner_image = "gameover_tie.png" # STILL NEED TO ADD THIS IMAGE
+            
+            try:
+                self.game_over_image = pygame.image.load(winner_image)
+                self.game_over_image = pygame.transform.scale(self.game_over_image, (DISPLAY_WIDTH, DISPLAY_HEIGHT))
+            except:
+                self.message = "Game Over! Could not load image"
+                self.message_color = (255, 0, 0)
+                self.message_time = time.time()
+
 
     def give_hint(self):
         #provides a hint by finding a valid set and selecting two of its cards
@@ -370,8 +388,12 @@ class SetGame:
         if found_set and SetAlgorithms.is_valid_set(*found_set):
             self.computer_last_set_indices = [self.table_cards.index(card) for card in found_set]
             self.computer_score += 1
-            self.message = "Computer found a SET! +1 point"
-            self.message_color = (200,0,20) # dark red color for computer's valid set message
+            
+            # Shows the image for when computer finds a set
+            comp_img = pygame.image.load("set_computer.png")
+            comp_img = pygame.transform.scale(comp_img, (450,250))
+            self.message = comp_img
+
             self.message_time = time.time()  # sets the message time to current time
             self.computer_pause_end = time.time() + COMPUTER_PAUSE  # sets the pause end time for computer's turn
             self.computer_set_found_time = time.time()
@@ -445,9 +467,11 @@ class SetGame:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.handle_click(event.pos)
+                if self.game_over:
+                    continue #Makes sure all input after the game is ingnored
+
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    self.handle_click(event.pos)
                 elif event.type == pygame.KEYDOWN:
                     self.handle_keyboard_input(event)
             
@@ -455,7 +479,12 @@ class SetGame:
                 self.update_timer() # updates the timer and checks if time is up
                 self.draw_cards() # draws the cards on the screen
             else:
-                self.draw_text(self.message, DISPLAY_WIDTH // 2-100, DISPLAY_HEIGHT//2, self.font, (200,0,0))
+                # Screen when the game ends
+                self.screen.fill((0,0,0))
+                if self.game_over_image:
+                    self.screen.blit(self.game_over_image, (0,0))
+                else:
+                    self.draw_text(self.message, DISPLAY_WIDTH // 2-100, DISPLAY_HEIGHT//2, self.font, (200,0,0))
                 pygame.display.flip()
         pygame.quit()
         sys.exit()
