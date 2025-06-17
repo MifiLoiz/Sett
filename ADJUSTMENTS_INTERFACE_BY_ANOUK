@@ -180,7 +180,7 @@ class SetGame:
         if self.computer_last_set_indices and time.time() < self.computer_pause_end:
             comp_msg = "Computer found set: " + ", ".join(str(i + 1) for i in self.computer_last_set_indices)
             comp_surface = self.small_font.render(comp_msg, True, (200, 0, 0))
-            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 60))
+            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 115))
 
         #updates the screen
         pygame.display.flip()
