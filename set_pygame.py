@@ -90,7 +90,6 @@ class SetGame:
         
         #shows pause 
         if self.paused:
-            self.draw_text("Game Paused", DISPLAY_WIDTH - 145, 27, self.small_font, color=(255, 0, 0),)
             pause_switch = True 
             try: 
             ## ELIZA WAS HERE: works!! 
