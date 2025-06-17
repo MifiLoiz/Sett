@@ -85,7 +85,8 @@ class SetGame:
         #draws current score and timer on top left corner
         self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
-        self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 125, 50, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"Time: {int(self.time_remaining)}s", DISPLAY_WIDTH - 150, 45, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"Cards left: {int(len(self.deck))}", DISPLAY_WIDTH - 150, 15, self.font)
         
         #shows pause 
         if self.paused:
