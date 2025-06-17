@@ -85,8 +85,8 @@ class SetGame:
         #draws current score and timer on top left corner
         self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
-        self.draw_text(f"Time: {int(self.time_remaining)}s", DISPLAY_WIDTH - 150, 45, self.font, (255,0,0)) #draws timer on top right corner
-        self.draw_text(f"Cards left: {int(len(self.deck))}", DISPLAY_WIDTH - 150, 15, self.font)
+        self.draw_text(f"Time: {int(self.time_remaining)}s", DISPLAY_WIDTH - 160, 45, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"Cards left: {int(len(self.deck))}", DISPLAY_WIDTH - 160, 15, self.font)
         
         #shows pause 
         if self.paused:
@@ -98,7 +98,7 @@ class SetGame:
                 pause_png = pygame.transform.scale(pause_png, (900, 600))  # scales the image to fit the card size
                 self.screen.blit(pause_png, (10, 5))  # draws the card image with a small margin 
             except:
-                self.draw_taxt("PAUSED", DISPLAY_WIDTH // 2 -50, DISPLAY_HEIGHT // 2, self.font, (255,0,0))
+                self.draw_text("PAUSED", DISPLAY_WIDTH // 2 -50, DISPLAY_HEIGHT // 2, self.font, (255,0,0))
             
             pygame.display.flip()
             return # Prevents drawing cards and hints while being paused
@@ -163,7 +163,7 @@ class SetGame:
         if self.computer_last_set_indices and time.time() < self.computer_pause_end:
             comp_msg = "Computer found set: " + ", ".join(str(i + 1) for i in self.computer_last_set_indices)
             comp_surface = self.small_font.render(comp_msg, True, (200, 0, 0))
-            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 60))
+            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 115))
 
         #updates the screen
         pygame.display.flip()
