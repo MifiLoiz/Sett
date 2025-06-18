@@ -10,13 +10,13 @@ MAX_CARDS_PER_ROW = 6
 MARGIN = 15
 DISPLAY_WIDTH = 1000
 DISPLAY_HEIGHT = 600
-TIMER_DURATION = 30  # seconds
+TIMER_DURATION = 5  # seconds
 CARD_FOLDER = "kaarten/"
 ICON_PATH = "SET_FamilyGames_digital-1.png"
 INITIAL_CARDS = 12  # initial number of cards on the table
 CARDS_TO_ADD = 3  # number of cards to add when no set is found
-MESSAGE_DURATION = 3  # seconds for message display
-COMPUTER_PAUSE = 3 #seconds to pause after computer finds set
+MESSAGE_DURATION = 5  # seconds for message display
+COMPUTER_PAUSE = 5 #seconds to pause after computer finds set
 
 #Card naming maps
 Color_names = {1: 'green', 2: 'red', 3: 'purple'}
@@ -103,7 +103,7 @@ class SetGame:
         #draws current score and timer on top left corner
         self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
-        self.draw_text(f"time:{int(self.time_remaining)}s", DISPLAY_WIDTH - 125, 50, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"Time: {int(self.time_remaining)}s", DISPLAY_WIDTH - 150, 45, self.font, (255,0,0)) #draws timer on top right corner
         
         #shows pause 
         if self.paused:
@@ -180,7 +180,7 @@ class SetGame:
         if self.computer_last_set_indices and time.time() < self.computer_pause_end:
             comp_msg = "Computer found set: " + ", ".join(str(i + 1) for i in self.computer_last_set_indices)
             comp_surface = self.small_font.render(comp_msg, True, (200, 0, 0))
-            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 60))
+            self.screen.blit(comp_surface, (DISPLAY_WIDTH // 2 - comp_surface.get_width() // 2, DISPLAY_HEIGHT - 115))
 
         #updates the screen
         pygame.display.flip()
