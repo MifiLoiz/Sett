@@ -42,7 +42,8 @@ class SetAlgorithms:
             all_same = (prop1 == prop2 == prop3)    
             all_different = (prop1 != prop2 and prop2 != prop3 and prop1 != prop3)
 
-            if not (all_same or all_different): # Once one False occurs, the SET is not valid (regardless of the other properties) 
+            # Once one False occurs, the SET is not valid (regardless of the other properties) 
+            if not (all_same or all_different): 
                 return False
         
         # If all properties are either the same or different, return True
