@@ -341,11 +341,13 @@ class SetGame:
             elif self.user_score < self.computer_score:
                 winner_image = "gameover_comp.png"
             else:
-                winner_image = "gameover_tie.png" # STILL NEED TO ADD THIS IMAGE
+                winner_image = "gameover_tie.png" 
             
             try:
                 self.game_over_image = pygame.image.load(winner_image)
-                self.game_over_image = pygame.transform.scale(self.game_over_image, (DISPLAY_WIDTH, DISPLAY_HEIGHT))
+                self.game_over_image = pygame.transform.scale(self.game_over_image, (DISPLAY_WIDTH - 80, DISPLAY_HEIGHT))
+                self.draw_text(f"User: {self.user_score} - Computer: {self.computer_score}", DISPLAY_WIDTH - 70, DISPLAY_WIDTH + 8, self.font) #draws user score on top left corner
+                pygame.display.flip()
             except:
                 self.message = "Game Over! Could not load image"
                 self.message_color = (255, 0, 0)
