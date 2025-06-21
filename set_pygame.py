@@ -335,6 +335,8 @@ class SetGame:
     def check_game_over(self):
         if not SetAlgorithms.find_one_set(self.table_cards) and not self.deck:
             self.game_over = True
+            self.gameover_text = [f"User: {self.user_score}", f"Computer: {self.computer_score}"]
+            self.large_font = pygame.font.SysFont('Arial', 60)
 
             if self.user_score > self.computer_score:
                 winner_image = "gameover_user.png" 
@@ -462,9 +464,14 @@ class SetGame:
                 self.draw_cards() # draws the cards on the screen
             else:
                 # Screen when the game ends
-                self.screen.fill((0,0,0))
+                self.screen.fill((255,255,255))
                 if self.game_over_image:
-                    self.screen.blit(self.game_over_image, (0,0))
+                    self.screen.blit(self.game_over_image, (0,0)) 
+                    #testing_text = f"TEST VOOR SCORES EROP PLAKKEN"
+                    #self.draw_text(testing_text, MARGIN, DISPLAY_HEIGHT, self.small_font, (200, 0, 0))
+
+                    for i, text in enumerate(self.gameover_text):
+                        self.draw_text(text, DISPLAY_WIDTH/2 - 130, DISPLAY_HEIGHT/2 + 70 + i * 50, self.large_font,(200, 0, 0))
                 else:
                     self.draw_text(self.message, DISPLAY_WIDTH // 2-100, DISPLAY_HEIGHT//2, self.font, (200,0,0))
                 pygame.display.flip()
