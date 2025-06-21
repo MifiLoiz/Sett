@@ -360,8 +360,13 @@ class SetGame:
         if found_set:
             self.hint_cards = random.sample(found_set,2)
             self.hint_used = True
-            self.message = "Hint: Two cards from a valid SET"
-            self.message_color = (0, 0, 255)  # blue color for hint message
+            #self.message = "Hint: Two cards from a valid SET"
+            
+            hint_img = pygame.image.load("hint_green.png")
+            hint_img = pygame.transform.scale(hint_img, (450,250))
+            self.message = hint_img
+
+            #self.message_color = (0, 0, 255)  # blue color for hint message
             self.message_time = time.time()  # sets the message time to current time
 
     def computer_turn(self):
@@ -387,8 +392,10 @@ class SetGame:
             # if no valid set is found, computer adds 3 cards
             if self.deck:
                 self.add_cards(min(CARDS_TO_ADD, len(self.deck))) # max 3 cards can be added
-                self.message = "No sets found, added 3 cards."
-                self.message_color = (0,0,0)  # black color for no set message
+                #self.message = "No sets found, added 3 cards."
+                #self.message_color = (0,0,0)  # black color for no set message
+                added_img = pygame.image.load(f"need_3cards.png")
+                added_img = pygame.transform.scale(added_img, (450, 250))
                 self.message_time = time.time()
 
                 self.timer_start = time.time() # Makes sure that user get 30 second for their turn after 3 new added cards
