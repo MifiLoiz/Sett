@@ -367,7 +367,11 @@ class SetGame:
             self.hint_used = True        
             hint_img = pygame.image.load("hint_green.png")
             hint_img = pygame.transform.scale(hint_img, (450,250))
+<<<<<<< HEAD
 >>>>>>> 74478eece8bd21747b2ca6898f32f8306e529d9d
+=======
+            self.message = hint_img
+>>>>>>> 282251e03815679d2b69bd23056a56a1cd192dc5
             self.message_time = time.time()  # sets the message time to current time
 
     def computer_turn(self):
