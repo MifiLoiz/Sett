@@ -1,5 +1,6 @@
 """
-This is the interface of our game, and therefore basically how the game works and all its attributes
+This is the interface of our game, and therefore basically how the game works and all its attributes. 
+Vb: This file contains two sets, which we have positioned together since they are both inherently about the functionality of the game. 
 """
 
 import pygame
@@ -288,8 +289,8 @@ class SetGame:
 #!!!!! MAAR DEZE IMAGE IS NIET EVEN GROOT
         else:
             self.message = pygame.image.load("Invalid_set.png")
-            self.message = pygame.transform.scale(self.message, (450, 250))
-            self.screen.blit(self.message, (10, 5))  # draws the card image with a small margin 
+            self.message = pygame.transform.scale(self.message, (570, 270))
+            self.screen.blit(self.message, (0, 0))  # draws the card image with a small margin 
         
         self.message_time = time.time()  # sets the message time to current time
         self.selected_indices.clear()
@@ -395,8 +396,9 @@ class SetGame:
             if self.deck:
                 self.add_cards(min(CARDS_TO_ADD, len(self.deck))) # max 3 cards can be added
                 added_img = pygame.image.load(f"need_3cards.png")
-                added_img = pygame.transform.scale(added_img, (450, 250))
+                added_img = pygame.transform.scale(added_img, (450, 150))
                 self.message = added_img
+                #self.screen.blit(added_img, (DISPLAY_HEIGHT - 10, DISPLAY_WIDTH - 10))
                 self.message_time = time.time()
 
                 self.timer_start = time.time() # Makes sure that user get 30 second for their turn after 3 new added cards
