@@ -1,4 +1,6 @@
-## the game
+"""
+This is the interface of our game, and therefore basically how the game works and all its attributes
+"""
 
 import pygame
 import random
@@ -13,7 +15,8 @@ class SetGame:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-        pygame.display.set_caption("SET Card Game")
+#!!!!!!!!! MAKE SURE IT SHOWS THE SET_FamilyGames_digital-1.png IMAGE AND NOT THE TEXT SET
+        pygame.display.set_caption("SET")
         try:
             pygame.display.set_icon(pygame.image.load(ICON_PATH))
         except:
@@ -92,7 +95,6 @@ class SetGame:
         if self.paused:
             pause_switch = True 
             try: 
-            ## ELIZA WAS HERE: works!! 
                 pause_png = pygame.image.load(f"paused_blop.png")
                 pause_png = pygame.transform.scale(pause_png, (900, 600))  # scales the image to fit the card size
                 self.screen.blit(pause_png, (10, 5))  # draws the card image with a small margin 
@@ -146,10 +148,7 @@ class SetGame:
 
         for i, text in enumerate(instructions):
             self.draw_text(text, MARGIN, DISPLAY_HEIGHT - 80 + i * 25, self.small_font)
-
-## ELIZA WAS HERE - dit moet goed worden 
-## !!!!!!Anouk was here - dit werkt nu ook, ik heb zegmaar if, else conditie toegeoegt
-# Hij crashde volgensmij omdat hij niet wist hoe hij verschil tussen image en tekst moest detecten
+        
         if self.message and time.time() - self.message_time < MESSAGE_DURATION:
             if isinstance(self.message, pygame.Surface):
                 # Self.message is an image not text
@@ -278,7 +277,6 @@ class SetGame:
             if not self.hint_used:
                 self.user_score += 1
             self.replace_cards(self.selected_indices)
-#!!!!!!!!!!!!!!Anouk was here
             self.clean_up_table()
             self.timer_start = time.time()  # resets the timer on valid set
         else:
@@ -287,8 +285,7 @@ class SetGame:
         
         self.message_time = time.time()  # sets the message time to current time
         self.selected_indices.clear()
-# !!!!!!!!!! Anouk was here
-# Dit was die hint issue die ik heb gestuurd in de groepsapp
+
         # Makes sure that when a hint is used the user cannot get a point
         if SetAlgorithms.is_valid_set(*cards):
             self.hint_used = False
@@ -307,8 +304,6 @@ class SetGame:
                     self.table_cards[i] = self.deck.pop()
                 else:
                     self.table_cards.pop(i)
-#!!!!!!!!!!!!!Anouk was here
-# Removed the while loop for an if while loop, so that it does not keep adding cards constantly
 # Makes sure that there are only cards added when the table is below 12
         if replacing:
             while len(self.table_cards) < INITIAL_CARDS and self.deck:
@@ -408,7 +403,6 @@ class SetGame:
             if time.time() >= self.computer_pause_end:
                 # Time to replace cards after showing computer's found set
                 self.replace_cards(self.computer_last_set_indices)
-#!!!!!!!!!!!!!!!Anouk was here
                 self.clean_up_table()
                 self.computer_last_set_indices = []
                 self.computer_set_found_time = None
