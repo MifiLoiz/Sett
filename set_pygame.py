@@ -11,16 +11,23 @@ from class_setalgorithms import SetAlgorithms
 from constants_pygame import * 
 from stand_alone_code import card_to_filename
 
+class Play_again_button:
+    def __init__(self, CARDWITH, CARDHEIGHT, image_path):
+        self.image = pygame.image.load(image_path)
+        self.image = pygame.transform.scale(self.image, (600,240))
+        self.rect = self.image.get_rect(center = (CARD_WIDTH // 2 + 800, CARD_HEIGHT // 2 + 380))
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+    def is_clicked(self, pos):
+        return self.rect.collidepoint(pos)
+
 class SetGame:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-#!!!!!!!!! MAKE SURE IT SHOWS THE SET_FamilyGames_digital-1.png IMAGE AND NOT THE TEXT SET
         pygame.display.set_caption("SET")
-        try:
-            pygame.display.set_icon(pygame.image.load(ICON_PATH))
-        except:
-            pass #skip if icon not found
 
         self.clock = pygame.time.Clock() # pygame.time.Clock() to control the frame rate
         self.font = pygame.font.SysFont('Arial', 28)
@@ -34,7 +41,7 @@ class SetGame:
         self.user_score = 0
         self.computer_score = 0
         self.timer_start = time.time()
-        self.time_remaining = TIMER_DURATION
+        self.time_remaining = TIMER_DURATION 
         self.paused = False
         self.pause_time = 0
         self.hint_used = False
@@ -51,6 +58,7 @@ class SetGame:
         self.computer_pause_duration = 3 #3 seconds pause
         self.computer_processing = False #To make sure that we can continue the game and the computer does not take over
         self.game_over_image = None #Image that is shown when the game has ended
+        self.play_again_button = Play_again_button(DISPLAY_WIDTH // 2-100, DISPLAY_HEIGHT // 2+160, "play_again.png")
 
     def draw_text(self, text, x, y, font=None, color=(0, 0, 0)):
         #helps to draw text on the screen at (x,y) position with specified font and color
@@ -88,8 +96,8 @@ class SetGame:
         #draws current score and timer on top left corner
         self.draw_text(f"User Score: {self.user_score}", 20, 10, self.font) #draws user score on top left corner
         self.draw_text(f"Computer score: {self.computer_score}", 20, 40, self.font) #draws computer score below user score
-        self.draw_text(f"Time: {int(self.time_remaining)}s", DISPLAY_WIDTH - 160, 45, self.font, (255,0,0)) #draws timer on top right corner
-        self.draw_text(f"Cards left: {int(len(self.deck))}", DISPLAY_WIDTH - 160, 15, self.font)
+        self.draw_text(f"Time: {int(self.time_remaining)}s", DISPLAY_WIDTH - 180, 45, self.font, (255,0,0)) #draws timer on top right corner
+        self.draw_text(f"Cards left: {int(len(self.deck))}", DISPLAY_WIDTH - 180, 15, self.font)
         
         #shows pause 
         if self.paused:
@@ -268,20 +276,20 @@ class SetGame:
             #self.screen.blit(set_self_img, (250, 375))  # draws the card image with a small margin 
 
             set_hint_img = pygame.image.load(f"set_hint.png")
-            set_hint_img = pygame.transform.scale(set_hint_img, (450, 250))  # scales the image to fit the card size
-            #self.screen.blit(set_hint_img, (250, 375))  # draws the card image with a small margin             
+            set_hint_img = pygame.transform.scale(set_hint_img, (450, 250))  # scales the image to fit the card size        
 
             self.message = (set_self_img if not self.hint_used else set_hint_img)
-            #self.message_color = (255, 105, 189) # pink color for valid set message
 
             if not self.hint_used:
                 self.user_score += 1
             self.replace_cards(self.selected_indices)
             self.clean_up_table()
             self.timer_start = time.time()  # resets the timer on valid set
+#!!!!! MAAR DEZE IMAGE IS NIET EVEN GROOT
         else:
-            self.message = "Not a valid SET!"
-            self.message_color = (255, 0, 0)  # red color for invalid set message
+            self.message = pygame.image.load("Invalid_set.png")
+            self.message = pygame.transform.scale(self.message, (450, 250))
+            self.screen.blit(self.message, (10, 5))  # draws the card image with a small margin 
         
         self.message_time = time.time()  # sets the message time to current time
         self.selected_indices.clear()
@@ -350,18 +358,13 @@ class SetGame:
 
 
     def give_hint(self):
+        # Makes sure only two cards are surrounded with a green line 
+        if self.hint_cards:
+            return
         #provides a hint by finding a valid set and selecting two of its cards
         found_set = SetAlgorithms.find_one_set(self.table_cards)
         if found_set:
             self.hint_cards = random.sample(found_set,2)
-            self.hint_used = True
-            #self.message = "Hint: Two cards from a valid SET"
-            
-            hint_img = pygame.image.load("hint_green.png")
-            hint_img = pygame.transform.scale(hint_img, (450,250))
-            self.message = hint_img
-
-            #self.message_color = (0, 0, 255)  # blue color for hint message
             self.hint_used = True        
             hint_img = pygame.image.load("hint_green.png")
             hint_img = pygame.transform.scale(hint_img, (450,250))
@@ -393,6 +396,7 @@ class SetGame:
                 self.add_cards(min(CARDS_TO_ADD, len(self.deck))) # max 3 cards can be added
                 added_img = pygame.image.load(f"need_3cards.png")
                 added_img = pygame.transform.scale(added_img, (450, 250))
+                self.message = added_img
                 self.message_time = time.time()
 
                 self.timer_start = time.time() # Makes sure that user get 30 second for their turn after 3 new added cards
@@ -455,6 +459,9 @@ class SetGame:
                 if event.type == pygame.QUIT:
                     running = False
                 if self.game_over:
+                    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        if self.play_again_button.is_clicked(event.pos):
+                            self.__init__() # Makes sure the game is reinitialized
                     continue #Makes sure all input after the game is ingnored
 
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -470,13 +477,13 @@ class SetGame:
                 self.screen.fill((255,255,255))
                 if self.game_over_image:
                     self.screen.blit(self.game_over_image, (0,0)) 
-                    #testing_text = f"TEST VOOR SCORES EROP PLAKKEN"
-                    #self.draw_text(testing_text, MARGIN, DISPLAY_HEIGHT, self.small_font, (200, 0, 0))
-
                     for i, text in enumerate(self.gameover_text):
                         self.draw_text(text, DISPLAY_WIDTH/2 - 130, DISPLAY_HEIGHT/2 + 70 + i * 50, self.large_font,(200, 0, 0))
                 else:
                     self.draw_text(self.message, DISPLAY_WIDTH // 2-100, DISPLAY_HEIGHT//2, self.font, (200,0,0))
+                
+                self.play_again_button.draw(self.screen)
+                
                 pygame.display.flip()
         pygame.quit()
         sys.exit()
