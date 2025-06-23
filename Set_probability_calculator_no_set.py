@@ -5,19 +5,17 @@ import random
 from class_card import Card
 from class_setalgorithms import SetAlgorithms
 
+"""
+Welcome to the Set Simulator file. 
+This file contains statistical tools  for analyzing SET game probabilities
+
+The simulator analyses how set probability changes with different table sizes.
+
+The simulator is mostly used for the report,
+"""
 class SetSimulator:
     @staticmethod
     def simulate_no_set_probability(sample_sizes: List[int], num_simulations: int = 10000) -> dict:
-        """
-        Simulate probability of having no sets for different sample sizes
-        
-        Args:
-            sample_sizes: List of card counts to test (e.g., [12, 15, 18, 21])
-            num_simulations: Number of simulations to run per sample size
-            
-        Returns:
-            Dictionary mapping sample sizes to no-set probabilities
-        """
         # Generate all possible cards once
         all_cards = SetAlgorithms.generate_all_cards()
         results = {}
