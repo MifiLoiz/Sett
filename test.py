@@ -1,6 +1,0 @@
-print("haaeelp")
-print("fuckdezeshit")
-print("hehehheehe")
-print("Eliza was here")
-print("pull a feat")
-print("hello")
