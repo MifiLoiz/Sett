@@ -1,6 +1,6 @@
 """
-This is the interface of our game, and therefore basically how the game works and all its attributes. 
 This file contains two sets, which we have positioned together since they are both inherently about the functionality of the game. 
+It contains the class for the play button and the whole interface of the game.
 """
 
 # Packages 
