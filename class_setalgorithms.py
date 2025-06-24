@@ -72,5 +72,5 @@ class SetAlgorithms:
     
     @staticmethod
     def is_cap_set(cards):
-        #check if tehre are no sets in collection
+        #check if there are no sets in collection
         return SetAlgorithms.find_one_set(cards) is None
