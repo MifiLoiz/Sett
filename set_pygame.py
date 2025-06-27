@@ -1,6 +1,11 @@
 """
-This file contains two sets, which we have positioned together since they are both inherently about the functionality of the game. 
-It contains the class for the play button and the whole interface of the game.
+Welcome to our game SET! 
+In order to play the game, all prerequisites must be installed, please consult the manual for more information. 
+Then, all that is needed to start the game is to hit the "Run"-butto in the top right corner of VScode and enjoy. 
+
+About the file, it contains two classes, which we have positioned together since they are both inherently about the functionality of the game. 
+It contains the class for the play button and the whole interface of the game. 
+These classes also use functions from other files, so please consult these to get a better understanding of the function.  
 """
 
 # Packages 
