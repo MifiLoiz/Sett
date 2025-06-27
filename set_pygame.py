@@ -40,9 +40,14 @@ class SetGame:
     def __init__(self):
         # Starts the game 
         pygame.init()
+        
         self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-        # Displays the word "SET" in the window of the game
-        pygame.display.set_caption("SET")
+        pygame.display.set_caption("SET_FamilyGames_digital-1.png")
+        try:
+            pygame.display.set_icon(pygame.image.load(ICON_PATH))
+        except:
+            pass #skip if icon not found
+        self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 
         self.clock = pygame.time.Clock() # pygame.time.Clock() to control the frame rate
         self.font = pygame.font.SysFont('Arial', 28) 
