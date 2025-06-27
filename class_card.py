@@ -1,4 +1,4 @@
-# Class Card test
+# Class Card
 
 """
 Welcome to the Card class file. This class defines the structure of a SET game card.
