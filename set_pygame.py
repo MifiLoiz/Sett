@@ -42,7 +42,7 @@ class SetGame:
         pygame.init()
         
         self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
-        pygame.display.set_caption("SET_FamilyGames_digital-1.png")
+        pygame.display.set_caption("SET")
         try:
             pygame.display.set_icon(pygame.image.load(ICON_PATH))
         except:
