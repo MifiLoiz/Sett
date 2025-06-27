@@ -18,6 +18,7 @@ from class_setalgorithms import SetAlgorithms
 from constants_pygame import * 
 from stand_alone_code import card_to_filename
 
+# Creates play button
 # For the play button we needed to create an individual class
 class Play_again_button:
     def __init__(self, CARDWITH, CARDHEIGHT, image_path):
@@ -74,6 +75,7 @@ class SetGame:
         self.game_over_image = None # Image that is shown when the game has ended
         self.play_again_button = Play_again_button(DISPLAY_WIDTH // 2-100, DISPLAY_HEIGHT // 2+160, "play_again.png")
 
+    # Draws text in the game
     def draw_text(self, text, x, y, font=None, color=(0, 0, 0)):
         # Helps to draw text on the screen at (x,y) position with specified font and color
         if font is None:
@@ -82,6 +84,7 @@ class SetGame:
         # Draws the text surface at (x,y) position
         self.screen.blit(surface, (x, y))
 
+    # Calculates the positions of the cards
     def calculate_card_positions(self):
         positions = []
         cards_per_row = min(MAX_CARDS_PER_ROW, len(self.table_cards))  # Ensures we don't exceed the number of cards
@@ -103,6 +106,7 @@ class SetGame:
             card_x += CARD_WIDTH + card_spacing  # Moves to the next card position
         return positions
     
+    # Draws the cards on the screen
     def draw_cards(self):
         global pause_switch
         # Draws all cards with proper spacing
@@ -175,10 +179,10 @@ class SetGame:
         
         if self.message and time.time() - self.message_time < MESSAGE_DURATION:
             if isinstance(self.message, pygame.Surface):
-                # Self.message is an image not text
+                # self.message is an image not text
                 self.screen.blit(self.message, (250, 375))  # Draws the card image with a small margin 
             else:
-                # Self.message is a text
+                # self.message is a text
                 msg_surface = self.font.render(self.message, True, self.message_color) # Renders the message text
                 self.screen.blit(msg_surface, (DISPLAY_WIDTH // 2 - msg_surface.get_width() // 2, DISPLAY_HEIGHT - 30)) # Draws message at the bottom of the screen
 
@@ -190,6 +194,7 @@ class SetGame:
         # Updates the screen
         pygame.display.flip()
 
+    # Handles mouseclicks on the screen
     def handle_click(self, pos):
         if self.paused or time.time() < self.computer_pause_end:
             return # Ignores clicks during pauses and computer processing
@@ -218,6 +223,7 @@ class SetGame:
                         self.check_user_set()
                     break
 
+    # Handles input from the keyboard
     def handle_keyboard_input(self,event):
         if event.key == pygame.K_p:
             # Makes sure that you can unpause when being paused even though the system ignores any clicks of the keyboard
@@ -247,7 +253,7 @@ class SetGame:
             # Scrolls up through the cards
             self.scroll_offset = min(0, self.scroll_offset + 20)
         elif event.key == pygame.K_DOWN:
-            max_offset = -((len(self.table_cards) // MAX_CARDS_PER_ROW) * (CARD_HEIGHT + MARGIN) - DISPLAY_HEIGHT + 200) # calculates max scroll offset based on number of cards
+            max_offset = -((len(self.table_cards) // MAX_CARDS_PER_ROW) * (CARD_HEIGHT + MARGIN) - DISPLAY_HEIGHT + 200) # Calculates max scroll offset based on number of cards
             self.scroll_offset = max(max_offset, self.scroll_offset - 20) # Scrolls down through the cards
         
         elif event.key == pygame.K_h:
@@ -260,6 +266,7 @@ class SetGame:
             # If Enter is pressed, checks if the selected cards form a valid set
             self.check_user_set()
 
+    # Enter and exit the pause state
     def toggle_pause(self):
         if self.paused:
             pause_duration = time.time() - self.pause_time
@@ -268,6 +275,7 @@ class SetGame:
             self.pause_time = time.time()
         self.paused = not self.paused  # Toggles the pause state
     
+    # Selects and deselects cards
     def select_card(self, index):
         # Selects a card based on the index, if index is valid
         if index < len(self.table_cards):
@@ -279,6 +287,7 @@ class SetGame:
             if len(self.selected_indices) == 3:
                 self.check_user_set()  # Checks if the selected cards form a valid set
 
+    # Checks if the three selected cards of the user form a set
     def check_user_set(self):
         # Checks if the selected cards form a valid set
         if len(self.selected_indices) != 3:
@@ -313,10 +322,11 @@ class SetGame:
             self.hint_cards = []
         self.check_game_over()
 
+    # Replaces the cards from the found set with cards from the deck until the deck is empty
     def replace_cards(self, indices):
         indices = sorted(indices, reverse=True)  # Sort indices in reverse order to avoid index errors
 
-        # Checks if it is necessary to replace or remove cards
+        # Checks if it is necessary to replace cards
         replacing = len(self.table_cards) <= INITIAL_CARDS
 
         for i in indices:
@@ -359,6 +369,7 @@ class SetGame:
                 self.message_color = (255, 0, 0)
                 self.message_time = time.time()
 
+    # Gives a hint when hint button has been pressed
     def give_hint(self):
         # Makes sure only two cards are surrounded with a green line 
         if self.hint_cards:
@@ -374,6 +385,7 @@ class SetGame:
             self.message = hint_img
             self.message_time = time.time()  # Sets the message time to current time
 
+    # Turn of the computer
     def computer_turn(self):
         if self.computer_processing:
             return #Don't allow new turns during the pause
@@ -392,7 +404,7 @@ class SetGame:
             self.message_time = time.time()  # Sets the message time to current time
             self.computer_pause_end = time.time() + COMPUTER_PAUSE  # Sets the pause end time for computer's turn
             self.computer_set_found_time = time.time()
-            self.computer_processing = True # Start pause lock
+            self.computer_processing = True # Start pause lock for the computer
             return True
         else:
             # If no valid set is found, computer adds 3 cards
@@ -406,11 +418,12 @@ class SetGame:
                 self.timer_start = time.time() # Makes sure that user gets 30 seconds for their turn after 3 new cards have been added
                 self.time_remaining = TIMER_DURATION
 
-                # Checks if the game should end, cleans the table,and makes sure the computer is done with processing the set
+                # Checks if the game should end and makes sure the computer is done with processing the set
                 self.check_game_over()
             self.computer_processing = False
             return False
 
+    # Timer
     def update_timer(self):
         # Updates the timer and checks if the time is up
         if self.paused:
@@ -451,8 +464,8 @@ class SetGame:
         if not SetAlgorithms.find_one_set(self.table_cards) and not self.deck:
             self.game_over = True # When there are no more possible sets on the table and the deck is empty, the game will end
 
+    # Main game loop
     def run(self):
-        # Main game loop
         running = True
         while running:
             self.clock.tick(30) # Limits the frame rate to 30 FPS
