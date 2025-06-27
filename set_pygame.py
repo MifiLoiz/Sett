@@ -293,7 +293,6 @@ class SetGame:
             if not self.hint_used:
                 self.user_score += 1
             self.replace_cards(self.selected_indices)
-            self.clean_up_table()
             self.timer_start = time.time()  # Resets the timer on valid set
         else:
             self.message = pygame.image.load("Invalid_set.png")
@@ -324,24 +323,13 @@ class SetGame:
         # Makes sure that there are only cards added when the table is below 12
         if replacing:
             while len(self.table_cards) < INITIAL_CARDS and self.deck:
-                self.table_cards.append(self.deck.pop())        
-        self.clean_up_table()
+                self.table_cards.append(self.deck.pop())
 
     # Adds cards to the table from the deck
     def add_cards(self,count):
         for _ in range(count):
             if self.deck:
                 self.table_cards.append(self.deck.pop())
-    
-    # Removes the first three cards of the cards on the table when there are more than 12 cards, thus when new cards have been added
-    def remove_top_cards(self, count):
-        if len(self.table_cards) > count:
-            self.table_cards = self.table_cards[count:]
-
-    # Removes cards in sets of three until there are only 12 crads   
-    def clean_up_table(self):
-        while len(self.table_cards) > INITIAL_CARDS and not SetAlgorithms.find_one_set(self.table_cards):
-            self.remove_top_cards(CARDS_TO_ADD)
 
     # Determines the end of the game
     def check_game_over(self):
@@ -414,7 +402,6 @@ class SetGame:
                 self.time_remaining = TIMER_DURATION
 
                 # Checks if the game should end, cleans the table,and makes sure the computer is done with processing the set
-                self.clean_up_table() 
                 self.check_game_over()
             self.computer_processing = False
             return False
@@ -429,7 +416,6 @@ class SetGame:
             if time.time() >= self.computer_pause_end:
                 # Time to replace cards after showing computer's found set
                 self.replace_cards(self.computer_last_set_indices)
-                self.clean_up_table()
                 self.computer_last_set_indices = []
                 self.computer_set_found_time = None
                 self.computer_pause_end = 0
